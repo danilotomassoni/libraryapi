@@ -17,12 +17,14 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @Table(name="books")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
+@ToString(exclude="author")
 public class Book {
     
     @Id
@@ -41,7 +43,7 @@ public class Book {
 
     private BigDecimal price;
 
-    @ManyToOne
+    @ManyToOne //(fetch=FetchType.LAZY)
     @JoinColumn(name="id_author")
     private Author author;
 
