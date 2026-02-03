@@ -121,4 +121,15 @@ public class BookRepositoryTest {
         List<Book> books = repository.findByIsbn("90888-88773");
         books.forEach(System.out::println);
     }
+
+    @Test
+    public void findAll(){
+        var books = repository.findAll();
+        books.forEach(System.out::println);
+    }
+    @Test
+    public void findAuthorAll(){
+        var authors = repository.findAuthorAll();
+        authors.forEach(System.out::println);
+    }
 }
