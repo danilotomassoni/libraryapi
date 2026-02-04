@@ -145,4 +145,13 @@ public class BookRepositoryTest {
         books.forEach(System.out::println);
     }
 
+    @Test
+    public void deleteByGender(){
+        repository.deleteByGender(GenderType.DOCUMENTARY);
+    }
+
+    @Test
+    public void updatePublicationDate(){
+        repository.updatePublicationDate(LocalDate.of(2000, 1, 1),UUID.fromString("1c5b9480-437d-46af-b781-6f092f37e5d8"));;
+    }
 }
