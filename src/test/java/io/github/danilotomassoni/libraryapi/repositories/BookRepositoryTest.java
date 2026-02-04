@@ -132,4 +132,17 @@ public class BookRepositoryTest {
         var authors = repository.findAuthorAll();
         authors.forEach(System.out::println);
     }
+
+    @Test
+    public void findByGenderQueryParam(){
+        var books = repository.findByGender(GenderType.FANTASY, "price");
+        books.forEach(System.out::println);
+    }
+
+    @Test
+    public void findByGenderPositionalParam(){
+        var books = repository.findByGender(GenderType.FANTASY, "price");
+        books.forEach(System.out::println);
+    }
+
 }
