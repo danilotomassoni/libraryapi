@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,7 +27,7 @@ public class AuthorController {
     private AuthorService service;
 
     @PostMapping
-    public ResponseEntity<AuthorDTO> save(@RequestBody AuthorDTO authorDTO){
+    public ResponseEntity<Void> save(@RequestBody AuthorDTO authorDTO){
 
         Author author = authorDTO.mappedByAuthor();
         service.save(author);
@@ -37,9 +38,7 @@ public class AuthorController {
         .buildAndExpand(author.getId())
         .toUri();
 
-        return ResponseEntity
-        .created(location)
-        .body(authorDTO);
+        return ResponseEntity.created(location).build();
     }
 
 
@@ -55,6 +54,20 @@ public class AuthorController {
         }
 
         return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") String id) {
+
+        Optional<Author> optional = service.findById(id);
+
+        if(optional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+
+        service.delete(optional.get().getId().toString());
+
+        return ResponseEntity.noContent().build();
     }
     
 }
