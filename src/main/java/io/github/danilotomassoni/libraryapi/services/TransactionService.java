@@ -2,6 +2,7 @@ package io.github.danilotomassoni.libraryapi.services;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,7 @@ public class TransactionService {
     public void saveBookAndAuthor(){
         
         Author author = new Author();
-        author.setName("João");
+        author.setName("Maria");
         author.setNationality("BRASILEIRA");
         author.setDateBirth(LocalDate.of(1979, 8, 25));
 
@@ -47,9 +48,16 @@ public class TransactionService {
 
         bookRepository.save(book);
 
-        if(author.getName().equals("João")){
+        if(author.getName().equals("Maria")){
             throw new RuntimeException("Looback!");
         }
+    }
+
+    @Transactional
+    public void updateWithoutUpdating(){
+        var book = bookRepository.findById(UUID.fromString("3e0bafac-7153-42c6-bc22-634d91396d4f")).orElse(null);
+
+        book.setPublicationDate(LocalDate.of(2026, 1, 1));
     }
 
 

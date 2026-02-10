@@ -14,4 +14,9 @@ public class TransactionServiceTest {
     public void saveBookAndAuthorServiceTest(){
         transactionService.saveBookAndAuthor();
     }
+
+    @Test
+    public void updateWithoutUpdatingServiceTest(){
+        transactionService.updateWithoutUpdating();
+    }
 }
