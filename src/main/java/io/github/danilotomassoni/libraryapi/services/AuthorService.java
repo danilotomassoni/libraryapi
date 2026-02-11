@@ -1,5 +1,6 @@
 package io.github.danilotomassoni.libraryapi.services;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -26,4 +27,21 @@ public class AuthorService {
     public void delete(String id){
         repository.deleteById(UUID.fromString(id));
     }
+
+    public List<Author> find(String name,String nationality){
+        if(name != null && nationality != null){
+            return repository.findByNameAndNationality(name, nationality);
+        }
+
+        if(name != null){
+            return repository.findByName(name);
+        }
+
+        if(nationality != null){
+            return repository.findByNationality(nationality);
+        }
+
+        return repository.findAll();
+    }
+
 }

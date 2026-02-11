@@ -1,7 +1,10 @@
 package io.github.danilotomassoni.libraryapi.controllers;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import io.github.danilotomassoni.libraryapi.dtos.AuthorDTO;
 import io.github.danilotomassoni.libraryapi.model.Author;
 import io.github.danilotomassoni.libraryapi.services.AuthorService;
+
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 
 @RestController
@@ -69,5 +75,25 @@ public class AuthorController {
 
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<AuthorDTO>>  find(
+        @RequestParam(value = "name",required=false) String name,
+        @RequestParam(value = "nationality",required=false) String nationality
+    ) {
+
+        List<Author> result = service.find(name, nationality);
+        List<AuthorDTO> list = result
+        .stream()
+        .map(author -> new AuthorDTO(
+            author.getId(),
+            author.getName(),
+            author.getDateBirth(),
+            author.getNationality()))
+        .collect(Collectors.toList());
+
+        return ResponseEntity.ok(list);
+    }
+    
     
 }
