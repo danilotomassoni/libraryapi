@@ -1,7 +1,6 @@
 package io.github.danilotomassoni.libraryapi.controllers;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -12,16 +11,16 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.github.danilotomassoni.libraryapi.dtos.AuthorDTO;
 import io.github.danilotomassoni.libraryapi.model.Author;
 import io.github.danilotomassoni.libraryapi.services.AuthorService;
-
-import org.springframework.web.bind.annotation.RequestParam;
 
 
 
@@ -95,5 +94,24 @@ public class AuthorController {
         return ResponseEntity.ok(list);
     }
     
+    @PutMapping("{id}")
+    public ResponseEntity<Void> update(@PathVariable("id") String id ,@RequestBody AuthorDTO authorDTO){
+        
+        Optional<Author> optional = service.findById(id);
+
+        if(optional.isEmpty()){
+            return ResponseEntity.notFound().build();
+        }
+        
+        var author = optional.get();
+        author.setName(authorDTO.name());
+        author.setDateBirth(authorDTO.dateBirth());
+        author.setNationality(authorDTO.nationality());
+        
+
+        service.update(author);
+
+        return ResponseEntity.noContent().build();
+    }
     
 }

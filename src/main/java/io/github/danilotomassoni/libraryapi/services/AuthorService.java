@@ -1,5 +1,6 @@
 package io.github.danilotomassoni.libraryapi.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -42,6 +43,14 @@ public class AuthorService {
         }
 
         return repository.findAll();
+    }
+
+    public void update(Author author){
+        if(author.getId() == null){
+            throw  new IllegalArgumentException("Erro updated! [ "+LocalDateTime.now()+" ]");
+        }
+
+        repository.save(author);
     }
 
 }
