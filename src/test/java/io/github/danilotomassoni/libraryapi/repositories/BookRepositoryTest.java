@@ -31,7 +31,7 @@ public class BookRepositoryTest {
         book.setTitle("US ARMY");
         book.setPublicationDate(LocalDate.of(2000, 12, 10));
         
-        Author author = authorRepository.findById(UUID.fromString("2cb8903a-e45b-444d-867a-7d4e5f3149b5")).orElse(null);
+        Author author = authorRepository.findById(UUID.fromString("5f9c893f-881f-46ee-884c-1aa5854d4c2f")).orElse(null);
 
         book.setAuthor(author);
 

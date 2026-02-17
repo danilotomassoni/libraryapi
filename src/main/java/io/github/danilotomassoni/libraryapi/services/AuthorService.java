@@ -8,8 +8,11 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedException;
 import io.github.danilotomassoni.libraryapi.model.Author;
 import io.github.danilotomassoni.libraryapi.repositories.AuthorRepository;
+import io.github.danilotomassoni.libraryapi.repositories.BookRepository;
+import io.github.danilotomassoni.libraryapi.validation.AuthorValidation;
 
 @Service
 public class AuthorService {
@@ -17,7 +20,14 @@ public class AuthorService {
     @Autowired
     private AuthorRepository repository;
 
+    @Autowired
+    private AuthorValidation validation;
+
+    @Autowired
+    private BookRepository bookRepository;
+
     public Author save(Author author){
+        validation.validation(author);
         return repository.save(author);
     }
 
@@ -25,8 +35,11 @@ public class AuthorService {
         return repository.findById(UUID.fromString(id));
     }
 
-    public void delete(String id){
-        repository.deleteById(UUID.fromString(id));
+    public void delete(Author author){
+        if(isPresentBook(author)){
+            throw new OperationNotPermittedException("The author has books registered!");
+        }
+        repository.deleteById(UUID.fromString(author.getId().toString()));
     }
 
     public List<Author> find(String name,String nationality){
@@ -50,7 +63,12 @@ public class AuthorService {
             throw  new IllegalArgumentException("Erro updated! [ "+LocalDateTime.now()+" ]");
         }
 
+        validation.validation(author);
         repository.save(author);
+    }
+
+    public boolean isPresentBook(Author author){
+        return bookRepository.existsByAuthor(author);
     }
 
 }
