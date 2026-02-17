@@ -24,6 +24,7 @@ import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedExce
 import io.github.danilotomassoni.libraryapi.exceptions.RegisterDuplicateException;
 import io.github.danilotomassoni.libraryapi.model.Author;
 import io.github.danilotomassoni.libraryapi.services.AuthorService;
+import jakarta.validation.Valid;
 
 
 
@@ -35,7 +36,7 @@ public class AuthorController {
     private AuthorService service;
 
     @PostMapping
-    public ResponseEntity<?> save(@RequestBody AuthorDTO authorDTO){
+    public ResponseEntity<?> save(@RequestBody @Valid AuthorDTO authorDTO){
         try{
             Author author = authorDTO.mappedByAuthor();
             service.save(author);
