@@ -35,7 +35,7 @@ public class Author {
     @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
 
-    @Column(nullable=false)
+    @Column(nullable=false, length=100)
     private String name;
 
     @Column(name="date_birth",nullable=false)
