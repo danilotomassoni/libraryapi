@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedException;
@@ -65,6 +67,21 @@ public class AuthorService {
 
         validation.validation(author);
         repository.save(author);
+    }
+
+    public List<Author> findByExample(String name, String nationality){
+        Author author = new Author();
+        author.setName(name);
+        author.setNationality(nationality);
+
+        ExampleMatcher matcher = ExampleMatcher.matching()
+            .withIgnoreNullValues()
+            .withIgnoreCase()
+            .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+        Example<Author> authorExample = Example.of(author, matcher);
+        
+        return repository.findAll(authorExample);
+
     }
 
     public boolean isPresentBook(Author author){
