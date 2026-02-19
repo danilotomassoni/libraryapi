@@ -38,6 +38,7 @@ public class Book {
     @GeneratedValue(strategy=GenerationType.UUID)
     private UUID id;
 
+    @Column(unique=true)
     private String isbn;
 
     private String title;
@@ -59,4 +60,7 @@ public class Book {
 
     @LastModifiedDate
     private LocalDateTime updatedAt;
+
+    @Column(name="id_user")
+    private UUID idUser;
 }
