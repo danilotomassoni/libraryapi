@@ -1,4 +1,4 @@
-package io.github.danilotomassoni.libraryapi.dtos;
+package io.github.danilotomassoni.libraryapi.controllers.dtos;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

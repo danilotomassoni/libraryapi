@@ -1,4 +1,4 @@
-package io.github.danilotomassoni.libraryapi.dtos;
+package io.github.danilotomassoni.libraryapi.controllers.dtos;
 
 import java.time.LocalDate;
 import java.util.UUID;

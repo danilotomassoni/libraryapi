@@ -1,9 +1,9 @@
-package io.github.danilotomassoni.libraryapi.mappers;
+package io.github.danilotomassoni.libraryapi.controllers.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import io.github.danilotomassoni.libraryapi.dtos.AuthorDTO;
+import io.github.danilotomassoni.libraryapi.controllers.dtos.AuthorDTO;
 import io.github.danilotomassoni.libraryapi.model.Author;
 
 @Mapper(componentModel="spring")

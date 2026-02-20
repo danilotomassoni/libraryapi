@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.github.danilotomassoni.libraryapi.dtos.BookDTO;
-import io.github.danilotomassoni.libraryapi.dtos.ResponseError;
+import io.github.danilotomassoni.libraryapi.controllers.dtos.BookDTO;
+import io.github.danilotomassoni.libraryapi.controllers.dtos.ResponseError;
+import io.github.danilotomassoni.libraryapi.controllers.mappers.BookMapper;
 import io.github.danilotomassoni.libraryapi.exceptions.RegisterDuplicateException;
-import io.github.danilotomassoni.libraryapi.mappers.BookMapper;
 import io.github.danilotomassoni.libraryapi.model.Book;
 import io.github.danilotomassoni.libraryapi.services.BookService;
 import jakarta.validation.Valid;

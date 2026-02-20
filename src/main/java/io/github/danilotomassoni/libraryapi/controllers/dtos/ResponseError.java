@@ -1,4 +1,4 @@
-package io.github.danilotomassoni.libraryapi.dtos;
+package io.github.danilotomassoni.libraryapi.controllers.dtos;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package io.github.danilotomassoni.libraryapi.common;
+package io.github.danilotomassoni.libraryapi.controllers.common;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import io.github.danilotomassoni.libraryapi.dtos.ResponseError;
+import io.github.danilotomassoni.libraryapi.controllers.dtos.ResponseError;
 
 
 @RestControllerAdvice
@@ -20,9 +20,9 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
     public ResponseError handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         List<FieldError> listErrors = e.getFieldErrors();
-        List<io.github.danilotomassoni.libraryapi.dtos.FieldError> responseErrors = listErrors
+        List<io.github.danilotomassoni.libraryapi.controllers.dtos.FieldError> responseErrors = listErrors
             .stream()
-            .map(f -> new io.github.danilotomassoni.libraryapi.dtos.FieldError(f.getField(),f.getDefaultMessage()))
+            .map(f -> new io.github.danilotomassoni.libraryapi.controllers.dtos.FieldError(f.getField(),f.getDefaultMessage()))
             .collect(Collectors.toList());
 
         return new ResponseError(HttpStatus.UNPROCESSABLE_CONTENT.value(),"VALIDATION ERROR",responseErrors);

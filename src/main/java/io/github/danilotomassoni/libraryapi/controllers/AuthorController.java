@@ -18,11 +18,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import io.github.danilotomassoni.libraryapi.dtos.AuthorDTO;
-import io.github.danilotomassoni.libraryapi.dtos.ResponseError;
+import io.github.danilotomassoni.libraryapi.controllers.dtos.AuthorDTO;
+import io.github.danilotomassoni.libraryapi.controllers.dtos.ResponseError;
+import io.github.danilotomassoni.libraryapi.controllers.mappers.AuthorMapper;
 import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedException;
 import io.github.danilotomassoni.libraryapi.exceptions.RegisterDuplicateException;
-import io.github.danilotomassoni.libraryapi.mappers.AuthorMapper;
 import io.github.danilotomassoni.libraryapi.model.Author;
 import io.github.danilotomassoni.libraryapi.services.AuthorService;
 import jakarta.validation.Valid;

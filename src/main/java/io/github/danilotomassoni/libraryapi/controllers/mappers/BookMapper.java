@@ -1,10 +1,10 @@
-package io.github.danilotomassoni.libraryapi.mappers;
+package io.github.danilotomassoni.libraryapi.controllers.mappers;
 
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import io.github.danilotomassoni.libraryapi.dtos.BookDTO;
+import io.github.danilotomassoni.libraryapi.controllers.dtos.BookDTO;
 import io.github.danilotomassoni.libraryapi.model.Book;
 import io.github.danilotomassoni.libraryapi.repositories.AuthorRepository;
 
