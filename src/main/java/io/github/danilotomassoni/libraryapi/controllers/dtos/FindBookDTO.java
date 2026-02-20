@@ -7,13 +7,12 @@ import java.util.UUID;
 import io.github.danilotomassoni.libraryapi.model.GenderType;
 
 public record FindBookDTO(
-    UUID id,
-    String isbn,
-    String title,
-    LocalDate publicationDate,
-    GenderType gender,
-    BigDecimal price,
-    AuthorDTO author
-){
+        UUID id,
+        String isbn,
+        String title,
+        LocalDate publicationDate,
+        GenderType gender,
+        BigDecimal price,
+        AuthorDTO author) {
 
 }
