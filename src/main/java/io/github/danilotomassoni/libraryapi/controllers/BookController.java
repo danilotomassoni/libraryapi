@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RestController;
 import io.github.danilotomassoni.libraryapi.dtos.BookDTO;
 import io.github.danilotomassoni.libraryapi.dtos.ResponseError;
 import io.github.danilotomassoni.libraryapi.exceptions.RegisterDuplicateException;
+import io.github.danilotomassoni.libraryapi.mappers.BookMapper;
+import io.github.danilotomassoni.libraryapi.model.Book;
 import io.github.danilotomassoni.libraryapi.services.BookService;
 import jakarta.validation.Valid;
 
@@ -21,11 +23,15 @@ public class BookController {
     @Autowired
     private BookService service;
 
+    @Autowired
+    private BookMapper mapper;
+
     @PostMapping
     public ResponseEntity<Object> save(@RequestBody @Valid BookDTO bookDTO) {
         try {
-
-            return ResponseEntity.ok(bookDTO);
+            Book book = mapper.toEntity(bookDTO);
+            service.save(book);
+            return ResponseEntity.ok(book);
         } catch (RegisterDuplicateException e) {
             var error = ResponseError.conflictError(e.getMessage());
             return  ResponseEntity.status(error.status()).body(error);
