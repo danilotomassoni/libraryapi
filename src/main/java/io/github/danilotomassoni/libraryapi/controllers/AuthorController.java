@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import io.github.danilotomassoni.libraryapi.controllers.dtos.AuthorDTO;
 import io.github.danilotomassoni.libraryapi.controllers.dtos.ResponseError;
@@ -31,7 +30,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("authors")
-public class AuthorController {
+public class AuthorController implements GenericController{
 
     @Autowired
     private AuthorService service;
@@ -44,12 +43,7 @@ public class AuthorController {
         try{
             Author author = mapper.toEntity(authorDTO);
             service.save(author);
-
-            URI location = ServletUriComponentsBuilder
-            .fromCurrentRequest()
-            .path("/{id}")
-            .buildAndExpand(author.getId())
-            .toUri();
+            URI location = generateHeaderLocation(author.getId());
 
             return ResponseEntity.created(location).build();
         }catch(RegisterDuplicateException e){

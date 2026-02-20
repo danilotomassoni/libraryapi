@@ -1,5 +1,7 @@
 package io.github.danilotomassoni.libraryapi.controllers;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,7 +20,7 @@ import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("books")
-public class BookController {
+public class BookController implements GenericController{
 
     @Autowired
     private BookService service;
@@ -31,7 +33,8 @@ public class BookController {
         try {
             Book book = mapper.toEntity(bookDTO);
             service.save(book);
-            return ResponseEntity.ok(book);
+            URI location = generateHeaderLocation(book.getId());
+            return ResponseEntity.created(location).build();
         } catch (RegisterDuplicateException e) {
             var error = ResponseError.conflictError(e.getMessage());
             return  ResponseEntity.status(error.status()).body(error);
