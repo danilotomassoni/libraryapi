@@ -22,6 +22,7 @@ import io.github.danilotomassoni.libraryapi.dtos.AuthorDTO;
 import io.github.danilotomassoni.libraryapi.dtos.ResponseError;
 import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedException;
 import io.github.danilotomassoni.libraryapi.exceptions.RegisterDuplicateException;
+import io.github.danilotomassoni.libraryapi.mappers.AuthorMapper;
 import io.github.danilotomassoni.libraryapi.model.Author;
 import io.github.danilotomassoni.libraryapi.services.AuthorService;
 import jakarta.validation.Valid;
@@ -35,10 +36,13 @@ public class AuthorController {
     @Autowired
     private AuthorService service;
 
+    @Autowired
+    private AuthorMapper mapper;
+
     @PostMapping
     public ResponseEntity<?> save(@RequestBody @Valid AuthorDTO authorDTO){
         try{
-            Author author = authorDTO.mappedByAuthor();
+            Author author = mapper.toEntity(authorDTO);
             service.save(author);
 
             URI location = ServletUriComponentsBuilder
@@ -58,15 +62,11 @@ public class AuthorController {
     @GetMapping("{id}")
     public ResponseEntity<AuthorDTO> findById(@PathVariable("id") String id) {
 
-        Optional<Author> optional = service.findById(id);
-
-        if(optional.isPresent()){
-            Author author = optional.get();
-            AuthorDTO authorDTO = new AuthorDTO(author.getId(),author.getName(),author.getDateBirth(),author.getNationality());
+        return service.findById(id)
+        .map(author -> {
+            AuthorDTO authorDTO = mapper.toDTO(author);
             return ResponseEntity.ok(authorDTO);
-        }
-
-        return ResponseEntity.notFound().build();
+        }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("{id}")
@@ -97,11 +97,7 @@ public class AuthorController {
         List<Author> result = service.findByExample(name, nationality);
         List<AuthorDTO> list = result
         .stream()
-        .map(author -> new AuthorDTO(
-            author.getId(),
-            author.getName(),
-            author.getDateBirth(),
-            author.getNationality()))
+        .map(mapper::toDTO)
         .collect(Collectors.toList());
 
         return ResponseEntity.ok(list);
