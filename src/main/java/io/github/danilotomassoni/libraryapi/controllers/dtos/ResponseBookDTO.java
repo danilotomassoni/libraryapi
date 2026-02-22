@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import io.github.danilotomassoni.libraryapi.model.GenderType;
 
-public record FindBookDTO(
+public record ResponseBookDTO(
         UUID id,
         String isbn,
         String title,

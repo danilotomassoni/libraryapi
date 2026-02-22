@@ -1,5 +1,8 @@
 package io.github.danilotomassoni.libraryapi.services;
 
+import java.util.Optional;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,5 +17,6 @@ public class BookService {
 
     public Book save(Book book){ return repository.save(book);}
 
+    public Optional<Book> findById(UUID id){ return repository.findById(id);}
     
 }
