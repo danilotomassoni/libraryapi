@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -71,5 +72,22 @@ public class BookController implements GenericController {
         var response = service.findAll(isbn, title, nameAuthor, gender, publicationDate);
         var list = response.stream().map(mapper::toDTO).collect(Collectors.toList());
         return ResponseEntity.ok(list);
+    }
+
+    @PutMapping("{id}")
+    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody @Valid BookDTO dto){
+         return service.findById(UUID.fromString(id))
+                .map(book -> {
+                    Book entity = mapper.toEntity(dto);
+                    book.setPublicationDate(entity.getPublicationDate());
+                    book.setIsbn(entity.getIsbn());
+                    book.setPrice(entity.getPrice());
+                    book.setGender(entity.getGender());
+                    book.setTitle(entity.getTitle());
+                    book.setAuthor(entity.getAuthor());
+
+                    service.update(book);
+                    return ResponseEntity.noContent().build();
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

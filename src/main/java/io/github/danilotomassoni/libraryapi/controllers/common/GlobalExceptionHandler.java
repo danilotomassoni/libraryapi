@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import io.github.danilotomassoni.libraryapi.controllers.dtos.ResponseError;
 import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedException;
 import io.github.danilotomassoni.libraryapi.exceptions.RegisterDuplicateException;
-import jakarta.validation.ConstraintViolationException;
 
 
 @RestControllerAdvice

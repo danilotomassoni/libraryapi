@@ -60,4 +60,11 @@ public class BookService {
         return repository.findAll(specs);
     }
 
+    public void update(Book book) {
+        if(book.getId() == null){
+            throw new IllegalArgumentException("Error updated!");
+        }
+        repository.save(book);
+    }
+
 }
