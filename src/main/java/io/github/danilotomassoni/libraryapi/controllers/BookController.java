@@ -1,7 +1,9 @@
 package io.github.danilotomassoni.libraryapi.controllers;
 
 import java.net.URI;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,12 +13,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.github.danilotomassoni.libraryapi.controllers.dtos.BookDTO;
 import io.github.danilotomassoni.libraryapi.controllers.dtos.ResponseBookDTO;
 import io.github.danilotomassoni.libraryapi.controllers.mappers.BookMapper;
 import io.github.danilotomassoni.libraryapi.model.Book;
+import io.github.danilotomassoni.libraryapi.model.GenderType;
 import io.github.danilotomassoni.libraryapi.services.BookService;
 import jakarta.validation.Valid;
 
@@ -54,5 +58,18 @@ public class BookController implements GenericController {
                     service.delete(book);
                     return ResponseEntity.noContent().build();
                 }).orElseGet(()->ResponseEntity.notFound().build());
+    }
+
+    @GetMapping
+    public ResponseEntity<List<ResponseBookDTO>> findAll(
+        @RequestParam(value="isbn", required= false)String isbn,
+        @RequestParam(value="title", required=false)String title,
+        @RequestParam(value="nameAuthor", required=false)String nameAuthor,
+        @RequestParam(value="gender", required=false)GenderType gender,
+        @RequestParam(value="publicationDate", required=false) Integer publicationDate
+    ){
+        var response = service.findAll(isbn, title, nameAuthor, gender, publicationDate);
+        var list = response.stream().map(mapper::toDTO).collect(Collectors.toList());
+        return ResponseEntity.ok(list);
     }
 }

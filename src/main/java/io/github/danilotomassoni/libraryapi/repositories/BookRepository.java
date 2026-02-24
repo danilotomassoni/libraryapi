@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -17,7 +18,7 @@ import io.github.danilotomassoni.libraryapi.model.GenderType;
 /**
  * @see BookRepositoryTest
  */
-public interface BookRepository extends JpaRepository<Book, UUID>{
+public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificationExecutor<Book>{
 
     List<Book> findByAuthor(Author author);
 
@@ -48,5 +49,5 @@ public interface BookRepository extends JpaRepository<Book, UUID>{
     @Query("UPDATE Book SET publicationDate = ?1 WHERE id = ?2")
     void updatePublicationDate(LocalDate newDate, UUID uuid);
 
-    boolean existsByAuthor(Author author);
+    boolean existsByAuthor(Author author);    
 }
