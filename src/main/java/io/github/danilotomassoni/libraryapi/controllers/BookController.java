@@ -1,11 +1,10 @@
 package io.github.danilotomassoni.libraryapi.controllers;
 
 import java.net.URI;
-import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -62,16 +61,20 @@ public class BookController implements GenericController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ResponseBookDTO>> findAll(
+    public ResponseEntity<Page<ResponseBookDTO>> findAll(
         @RequestParam(value="isbn", required= false)String isbn,
         @RequestParam(value="title", required=false)String title,
         @RequestParam(value="nameAuthor", required=false)String nameAuthor,
         @RequestParam(value="gender", required=false)GenderType gender,
-        @RequestParam(value="publicationDate", required=false) Integer publicationDate
+        @RequestParam(value="publicationDate", required=false) Integer publicationDate,
+        @RequestParam(value="page", defaultValue="0") Integer page,
+        @RequestParam(value="size", defaultValue="10") Integer size
     ){
-        var response = service.findAll(isbn, title, nameAuthor, gender, publicationDate);
-        var list = response.stream().map(mapper::toDTO).collect(Collectors.toList());
-        return ResponseEntity.ok(list);
+        var response = service.findAll(isbn, title, nameAuthor, gender, publicationDate,page,size);
+        
+        Page<ResponseBookDTO>  pageResponse = response.map(mapper::toDTO);
+
+        return ResponseEntity.ok(pageResponse);
     }
 
     @PutMapping("{id}")

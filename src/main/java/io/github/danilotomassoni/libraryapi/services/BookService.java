@@ -1,10 +1,12 @@
 package io.github.danilotomassoni.libraryapi.services;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -36,37 +38,47 @@ public class BookService {
         repository.delete(book);
     }
 
-    public List<Book> findAll(String isbn,String title, String nameAuthor, GenderType gender, Integer publicationDate) {
-        /**    
-        Specification<Book> specs = Specification.where(BookSpec.isbnEqual(isbn))
-        .and(BookSpec.titleLike(title)
-        .and(BookSpec.genderEqual(gender)));
-        */
-       
+    public Page<Book> findAll(
+            String isbn,
+            String title,
+            String nameAuthor,
+            GenderType gender,
+            Integer publicationDate,
+            Integer page,
+            Integer size) {
+        /**
+         * Specification<Book> specs = Specification.where(BookSpec.isbnEqual(isbn))
+         * .and(BookSpec.titleLike(title)
+         * .and(BookSpec.genderEqual(gender)));
+         */
+
         Specification<Book> specs = Specification.where((root, q, cb) -> cb.conjunction());
 
-        if(isbn != null){
+        if (isbn != null) {
             specs = specs.and(BookSpec.isbnEqual(isbn));
         }
-        if(title != null){
+        if (title != null) {
             specs = specs.and(BookSpec.titleLike(title));
         }
 
-        if(gender != null){
+        if (gender != null) {
             specs = specs.and(BookSpec.genderEqual(gender));
         }
 
-        if(publicationDate != null){
+        if (publicationDate != null) {
             specs = specs.and(BookSpec.publicationDateEqual(publicationDate));
         }
-        if(nameAuthor != null){
+        if (nameAuthor != null) {
             specs = specs.and(BookSpec.nameAuthorLike(nameAuthor));
         }
-        return repository.findAll(specs);
+
+        Pageable pageable = PageRequest.of(page, size);
+
+        return repository.findAll(specs, pageable);
     }
 
     public void update(Book book) {
-        if(book.getId() == null){
+        if (book.getId() == null) {
             throw new IllegalArgumentException("Error updated!");
         }
 
