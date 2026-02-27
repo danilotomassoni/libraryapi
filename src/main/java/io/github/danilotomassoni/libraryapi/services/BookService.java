@@ -12,6 +12,7 @@ import io.github.danilotomassoni.libraryapi.model.Book;
 import io.github.danilotomassoni.libraryapi.model.GenderType;
 import io.github.danilotomassoni.libraryapi.repositories.BookRepository;
 import io.github.danilotomassoni.libraryapi.repositories.specs.BookSpec;
+import io.github.danilotomassoni.libraryapi.validation.BookValidation;
 
 @Service
 public class BookService {
@@ -19,7 +20,11 @@ public class BookService {
     @Autowired
     private BookRepository repository;
 
+    @Autowired
+    private BookValidation validator;
+
     public Book save(Book book) {
+        validator.validation(book);
         return repository.save(book);
     }
 
@@ -64,6 +69,8 @@ public class BookService {
         if(book.getId() == null){
             throw new IllegalArgumentException("Error updated!");
         }
+
+        validator.validation(book);
         repository.save(book);
     }
 

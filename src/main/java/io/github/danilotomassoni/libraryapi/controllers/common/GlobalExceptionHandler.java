@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import io.github.danilotomassoni.libraryapi.controllers.dtos.ResponseError;
+import io.github.danilotomassoni.libraryapi.exceptions.InvalidFieldException;
 import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedException;
 import io.github.danilotomassoni.libraryapi.exceptions.RegisterDuplicateException;
 
@@ -31,7 +32,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(RegisterDuplicateException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseError handleRegisterDuplicateException(RegisterDuplicateException e){
         return ResponseError.conflictError(e.getMessage());
     }
@@ -40,6 +41,12 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseError handleOperationNotPermittedException(OperationNotPermittedException e){
         return ResponseError.responseError(e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidFieldException.class)
+    @ResponseStatus(HttpStatus.UNPROCESSABLE_CONTENT)
+    public ResponseError handlerNotErrors(InvalidFieldException e){
+        return new ResponseError(HttpStatus.UNPROCESSABLE_CONTENT.value(),"",List.of(new io.github.danilotomassoni.libraryapi.controllers.dtos.FieldError(e.getField(),e.getMessage())));
     }
 
     @ExceptionHandler(RuntimeException.class)

@@ -2,6 +2,7 @@ package io.github.danilotomassoni.libraryapi.repositories;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -24,7 +25,7 @@ public interface BookRepository extends JpaRepository<Book, UUID>, JpaSpecificat
 
     List<Book> findByTitle(String title);
 
-    List<Book> findByIsbn(String isbn);
+    Optional<Book> findByIsbn(String isbn);
 
     //JPQL
     @Query("SELECT b FROM Book AS b ORDER BY b.title")
