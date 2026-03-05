@@ -14,6 +14,7 @@ import io.github.danilotomassoni.libraryapi.exceptions.OperationNotPermittedExce
 import io.github.danilotomassoni.libraryapi.model.Author;
 import io.github.danilotomassoni.libraryapi.repositories.AuthorRepository;
 import io.github.danilotomassoni.libraryapi.repositories.BookRepository;
+import io.github.danilotomassoni.libraryapi.security.SecurityService;
 import io.github.danilotomassoni.libraryapi.validation.AuthorValidation;
 
 @Service
@@ -28,8 +29,13 @@ public class AuthorService {
     @Autowired
     private BookRepository bookRepository;
 
+
+    @Autowired
+    private SecurityService securityService;
+
     public Author save(Author author){
         validation.validation(author);
+        author.setUser(securityService.userLogged());
         return repository.save(author);
     }
 

@@ -14,6 +14,7 @@ import io.github.danilotomassoni.libraryapi.model.Book;
 import io.github.danilotomassoni.libraryapi.model.GenderType;
 import io.github.danilotomassoni.libraryapi.repositories.BookRepository;
 import io.github.danilotomassoni.libraryapi.repositories.specs.BookSpec;
+import io.github.danilotomassoni.libraryapi.security.SecurityService;
 import io.github.danilotomassoni.libraryapi.validation.BookValidation;
 
 @Service
@@ -25,8 +26,12 @@ public class BookService {
     @Autowired
     private BookValidation validator;
 
+    @Autowired
+    private SecurityService securityService;
+
     public Book save(Book book) {
         validator.validation(book);
+        book.setUser(securityService.userLogged());
         return repository.save(book);
     }
 

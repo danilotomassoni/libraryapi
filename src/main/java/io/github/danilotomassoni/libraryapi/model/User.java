@@ -3,11 +3,6 @@ package io.github.danilotomassoni.libraryapi.model;
 import java.util.List;
 import java.util.UUID;
 
-import org.hibernate.annotations.Type;
-
-import io.hypersistence.utils.hibernate.type.array.ListArrayType;
-import io.hypersistence.utils.hibernate.type.array.internal.ListArrayTypeDescriptor;
-import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

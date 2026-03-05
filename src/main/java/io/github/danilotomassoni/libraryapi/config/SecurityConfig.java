@@ -4,6 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,6 +18,7 @@ import io.github.danilotomassoni.libraryapi.services.UserService;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity(securedEnabled=true, jsr250Enabled=true)
 public class SecurityConfig {
 
     @Bean
@@ -29,10 +31,7 @@ public class SecurityConfig {
                 })
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/login/**").permitAll();
-                    auth.requestMatchers(HttpMethod.POST,"/users/**").permitAll();
-                    auth.requestMatchers("/authors/**").hasRole("ADMIN");
-                    auth.requestMatchers("/books/**").hasAnyRole("USER","ADMIN");
-                    
+                    auth.requestMatchers(HttpMethod.POST, "/users/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .build();

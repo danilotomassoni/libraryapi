@@ -61,6 +61,7 @@ public class Book {
     @LastModifiedDate
     private LocalDateTime updatedAt;
 
-    @Column(name="id_user")
-    private UUID idUser;
+    @ManyToOne
+    @JoinColumn(name="id_user")
+    private User user;
 }

@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,6 +36,7 @@ public class BookController implements GenericController {
     private BookMapper mapper;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Object> save(@RequestBody @Valid BookDTO bookDTO) {
         Book book = mapper.toEntity(bookDTO);
         service.save(book);
@@ -43,6 +45,7 @@ public class BookController implements GenericController {
     }
 
     @GetMapping("{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<ResponseBookDTO> findById(@PathVariable("id") String id) {
         return service.findById(UUID.fromString(id))
                 .map(book -> {
@@ -52,34 +55,36 @@ public class BookController implements GenericController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Object> delete(@PathVariable("id") String id){
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<Object> delete(@PathVariable("id") String id) {
         return service.findById(UUID.fromString(id))
                 .map(book -> {
                     service.delete(book);
                     return ResponseEntity.noContent().build();
-                }).orElseGet(()->ResponseEntity.notFound().build());
+                }).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
     public ResponseEntity<Page<ResponseBookDTO>> findAll(
-        @RequestParam(value="isbn", required= false)String isbn,
-        @RequestParam(value="title", required=false)String title,
-        @RequestParam(value="nameAuthor", required=false)String nameAuthor,
-        @RequestParam(value="gender", required=false)GenderType gender,
-        @RequestParam(value="publicationDate", required=false) Integer publicationDate,
-        @RequestParam(value="page", defaultValue="0") Integer page,
-        @RequestParam(value="size", defaultValue="10") Integer size
-    ){
-        var response = service.findAll(isbn, title, nameAuthor, gender, publicationDate,page,size);
-        
-        Page<ResponseBookDTO>  pageResponse = response.map(mapper::toDTO);
+            @RequestParam(value = "isbn", required = false) String isbn,
+            @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "nameAuthor", required = false) String nameAuthor,
+            @RequestParam(value = "gender", required = false) GenderType gender,
+            @RequestParam(value = "publicationDate", required = false) Integer publicationDate,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "10") Integer size) {
+        var response = service.findAll(isbn, title, nameAuthor, gender, publicationDate, page, size);
+
+        Page<ResponseBookDTO> pageResponse = response.map(mapper::toDTO);
 
         return ResponseEntity.ok(pageResponse);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody @Valid BookDTO dto){
-         return service.findById(UUID.fromString(id))
+    @PreAuthorize("hasAnyRole('ADMIN','USER')")
+    public ResponseEntity<Object> update(@PathVariable("id") String id, @RequestBody @Valid BookDTO dto) {
+        return service.findById(UUID.fromString(id))
                 .map(book -> {
                     Book entity = mapper.toEntity(dto);
                     book.setPublicationDate(entity.getPublicationDate());

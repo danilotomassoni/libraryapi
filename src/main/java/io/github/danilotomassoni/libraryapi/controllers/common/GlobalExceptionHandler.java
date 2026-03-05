@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -55,5 +56,10 @@ public class GlobalExceptionHandler {
         return  new ResponseError(HttpStatus.INTERNAL_SERVER_ERROR.value(),e.getMessage(),List.of());
     }
 
-   
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ResponseError handleAccessDaniedException(AccessDeniedException e){
+        return  new ResponseError(HttpStatus.FORBIDDEN.value(),e.getMessage(),List.of());
+    }
+    
 }
